@@ -100,7 +100,7 @@ abstract class TomcatServer implements EmbeddableServer {
      *
      * If httpsPort is > 0, the server should listen for https requests on that port.
      */
-    protected abstract void doStart(String host, int httpPort, int httpsPort)
+    protected abstract void doStart(String host, Integer httpPort, Integer httpsPort)
 
     /**
      * Shutdown the server.
@@ -116,23 +116,23 @@ abstract class TomcatServer implements EmbeddableServer {
         start(null, null)
     }
 
-    void start(int port) {
+    void start(Integer port) {
         start(null, port)
     }
 
-    void start(String host, int port) {
-        doStart(host ?: DEFAULT_HOST, port ?: DEFAULT_PORT, 0)
+    void start(String host, Integer port) {
+        doStart(host ?: DEFAULT_HOST, (port != null) ? port : DEFAULT_PORT, -1)
     }
 
     void startSecure() {
         startSecure(null)
     }
 
-    void startSecure(int port) {
+    void startSecure(Integer port) {
         startSecure(null, null, port)
     }
 
-    void startSecure(String host, int httpPort, int httpsPort) {
+    void startSecure(String host, Integer httpPort, Integer httpsPort) {
         if (!keystoreFile.exists()) {
             if (usingUserKeystore) {
                 throw new IllegalStateException("cannot start tomcat in https because use keystore does not exist (value: $keystoreFile)")
@@ -141,7 +141,7 @@ abstract class TomcatServer implements EmbeddableServer {
             }
         }
 
-        doStart(host ?: DEFAULT_HOST, httpPort ?: DEFAULT_PORT, httpsPort ?: DEFAULT_SECURE_PORT)
+        doStart(host ?: DEFAULT_HOST, (httpPort != null) ? httpPort : DEFAULT_PORT, (httpsPort != null) ? httpsPort : DEFAULT_SECURE_PORT)
     }
 
     protected File getWorkDirFile(String path) {

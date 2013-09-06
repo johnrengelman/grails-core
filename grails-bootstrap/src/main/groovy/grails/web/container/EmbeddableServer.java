@@ -35,14 +35,14 @@ public interface EmbeddableServer {
      * Starts the container on the given port
      * @param port The port number
      */
-    void start(int port);
+    void start(Integer port);
 
     /**
      * Starts the container on the given port
      * @param host The host to start on
      * @param port The port number
      */
-    void start(String host, int port);
+    void start(String host, Integer port);
 
     /**
      * Starts a secure container running over HTTPS
@@ -53,7 +53,7 @@ public interface EmbeddableServer {
      * Starts a secure container running over HTTPS for the given port
      * @param port The port
      */
-    void startSecure(int port);
+    void startSecure(Integer port);
 
     /**
      * Starts a secure container running over HTTPS for the given port and host.
@@ -61,7 +61,7 @@ public interface EmbeddableServer {
      * @param httpPort The port for HTTP traffic.
      * @param httpsPort The port for HTTPS traffic.
      */
-    void startSecure(String host, int httpPort, int httpsPort);
+    void startSecure(String host, Integer httpPort, Integer httpsPort);
 
     /**
      * Stops the container
@@ -72,4 +72,8 @@ public interface EmbeddableServer {
      * Typically combines the stop() and start() methods in order to restart the container
      */
     void restart();
+
+    int getLocalHttpPort();
+
+    int getLocalHttpsPort();
 }

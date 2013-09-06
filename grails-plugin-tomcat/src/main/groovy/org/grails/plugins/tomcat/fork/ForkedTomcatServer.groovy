@@ -70,7 +70,7 @@ class ForkedTomcatServer extends ForkedGrailsProcess implements EmbeddableServer
         initializeLogging(ec.grailsHome,classLoader)
 
         tomcatRunner = new TomcatRunner("$buildSettings.baseDir/web-app", buildSettings.webXmlLocation.absolutePath, ec.contextPath, classLoader)
-        if (ec.securePort > 0) {
+        if (ec.securePort >= 0) {
             tomcatRunner.startSecure(ec.host, ec.port, ec.securePort)
         }
         else {
@@ -81,12 +81,12 @@ class ForkedTomcatServer extends ForkedGrailsProcess implements EmbeddableServer
     }
 
     @CompileStatic
-    void start(String host, int port) {
-        startSecure(host, port, 0)
+    void start(String host, Integer port) {
+        startSecure(host, port, -1)
     }
 
     @CompileStatic
-    void startSecure(String host, int httpPort, int httpsPort) {
+    void startSecure(String host, Integer httpPort, Integer httpsPort) {
         final ec = executionContext
         ec.host = host
         ec.port = httpPort
@@ -99,14 +99,14 @@ class ForkedTomcatServer extends ForkedGrailsProcess implements EmbeddableServer
         } )
 
         t.start()
-        while(!isAvailable(host, httpPort)) {
+        while(!isAvailable(host, getLocalHttpPort())) {
             sleep 100
         }
         System.setProperty(TomcatKillSwitch.TOMCAT_KILL_SWITCH_ACTIVE, "true")
     }
 
     @CompileStatic
-    boolean isAvailable(String host, int port) {
+    boolean isAvailable(String host, Integer port) {
         try {
             new Socket(host, port)
             return true
@@ -187,10 +187,10 @@ class ForkedTomcatServer extends ForkedGrailsProcess implements EmbeddableServer
         }
 
         @Override
-        void start(String host, int port) {
-            currentHost = host
-            currentPort = port
+        void start(String host, Integer port) {
             super.start(host, port)
+            currentHost = host
+            currentPort = getLocalHttpPort()
         }
 
         @Override
