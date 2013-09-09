@@ -195,12 +195,14 @@ class GrailsProjectRunner extends BaseSettingsApi {
                     server.startSecure args.host, args.httpPort, args.httpsPort
 
                     // Update the message to reflect the fact we are running HTTPS as well.
+                    System.setProperty('server.port.https', server.localHttpsPort.toString())
                     httpsMessage = " or https://${args.host ?: 'localhost'}:${server.localHttpsPort}$serverContextPath"
                 }
                 else {
                     server.start args.host, args.httpPort
                 }
             }
+            System.setProperty('server.port', server.localHttpPort.toString())
             def message = "Server running. Browse to http://${args.host ?: 'localhost'}:${server.localHttpPort}$serverContextPath" + httpsMessage
             eventListener.triggerEvent("StatusFinal", message)
 
