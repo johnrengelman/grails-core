@@ -88,6 +88,9 @@ target(allTests: "Runs the project's tests.") {
         def forkedTestRunner = new ForkedGrailsTestRunner(grailsSettings)
         if(grailsSettings.forkSettings.test instanceof Map) {
             forkedTestRunner.configure(grailsSettings.forkSettings.test)
+                //Let's plugins know that the test phase is ready (i.e. functional tests ready and port has been binded)
+                event("TestPhasePrepared", [phase])
+
         }
         forkedTestRunner.fork(argsMap)
     }
